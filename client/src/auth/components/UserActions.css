@@ -1,0 +1,8 @@
+.user-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 16px;
+  gap: 10px;
+  margin: 0 10px;
+}

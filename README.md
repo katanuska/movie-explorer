@@ -1,7 +1,7 @@
 # Movie Explorer
 
 This app is a simplified version designed to let users browse through a catalogue of
-movies and save their personal favourites.
+movies and save their personal favorites.
 
 ## Run application
 
@@ -11,26 +11,33 @@ Environment variables
 
 | Name              | Default value | Required  | Description                                   |
 |-----------------  |---------------|-----------|-----------------------------------------------|
-| MODE              | PRODUCTION    | false     | DEV or PRODUCTION                             |           
+| NODE_ENV          | production    | false     | development or production                     |           
 | PORT              | 3000          | false     | Port number on which the server should listen |
 | POSTGRES_HOST     | localhost     | false     | Database host                                 |
 | POSTGRES_PORT     | 5432          | false     | Database port                                 |
 | POSTGRES_USER     |               | true      | Database user                                 |
 | POSTGRES_PASSWORD |               | true      | User password for PostgreSQL                  |
 | POSTGRES_DATABASE |               | true      | Database name                                 |
+| JWT_SECRET        |               | true      | Key used for signing JWT tokens               |
+| JWT_EXPIRATiON    | 3600000       | false     | JWT toke expiration time in milliseconds      |
 
 ### Development
-Run server:
-Run database with docker-compose: `docker-compose up`
-
-Install dependencies and run server:
-`npm install`
-`npm run start:dev`
+To run server and client in development mode run `docker-compose up -d`, `npm install` and `npm start`.
+To run server alone run `cd server`, `npm install` and `npm run start:dev`.
+To run client alone run `cd client`, `npm install` and `npm run start`.
 
 
 ### Production
+`docker-compose up -d`
+
+`cd server`
 `npm install`
 `npm run start:prod`
+
+`cd client`
+`npm run build`
+
+
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
 
@@ -47,17 +54,17 @@ With Mau, you can deploy your application in just a few clicks, allowing you to 
 
 
 ## Key features
-- **User Management:** The app support multiple users. Each user is able to log in and manage their own list of favourite movies (this list is private to the user).
+- **User Management:** The app support multiple users. Each user is able to log in and manage their own list of favorite movies (this list is private to the user).
 - **Movie Browsing:** Providing simple interface for users to explore a catalogue of movies. Movies are containing title, release year, genre, runtime, language, poster,
 rating, etc.
-- **Favourites Management:** Users are be able to add movies to their list of favourites and remove them as needed. This list is persisted across sessions.
+- **Favorites Management:** Users are be able to add movies to their list of favorites and remove them as needed. This list is persisted across sessions.
 
 ### Web application
 Web application contains pages for
 - A login/signup page for authentication.
-- A public page showing a list of movies and a way to favourite movies.
-- A protected "Favourites" page where users can view and remove their
-favourite movies.
+- A public page showing a list of movies and a way to favorite movies.
+- A protected "Favorites" page where users can view and remove their
+favorite movies.
 - Movie details page with extra 1:n or n:n data (e.g. top cast, fun facts...)
 
 ## REST API
@@ -66,11 +73,11 @@ favourite movies.
 
 ### Search movies by title or other attributes (e.g., genre, release year)
 
-### Save a movie to the user's favourite list
+### Save a movie to the user's favorite list
 
-### Retrieve the user's list of favourite movies
+### Retrieve the user's list of favorite movies
 
-### Remove a movie from the user's favourite list
+### Remove a movie from the user's favorite list
 
 
 ## Implementation

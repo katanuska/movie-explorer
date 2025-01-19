@@ -23,6 +23,6 @@ export class Movie {
   @Column()
   posterUrl: string;
 
-  @Column()
+  @Column('decimal', { precision: 3, scale: 1 })
   rating: number;
 }

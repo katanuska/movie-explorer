@@ -1,56 +1,38 @@
-# compiled output
-server/dist
-server/node_modules
-server/build
-
-# Logs
-logs
+# General
+node_modules/
+dist/
+.env
+.env.*.local
+.DS_Store
 *.log
+*.lock
+*.cache
 npm-debug.log*
-pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-lerna-debug.log*
+package-lock.json
+yarn.lock
 
-# OS
-.DS_Store
 
-# Tests
-**/coverage
-**/.nyc_output
+# Server (NestJS)
+server/node_modules/
+server/dist/
+server/.env
+server/.env.*.local
 
-# IDEs and editors
-**/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+# Client (Vite React)
+client/node_modules/
+client/public/
+client/.env
+client/.env.*.local
+client/.vite/
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+# IDE and Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
 
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
-
-# temp directory
-.temp
-.tmp
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Diagnostic reports (https://nodejs.org/api/report.html)
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+# OS Generated files
+Thumbs.db
+*.DS_Store

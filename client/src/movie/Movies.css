@@ -1,0 +1,47 @@
+.movieList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
+  grid-gap: 10px;
+  justify-content: center;
+}
+
+.movieCard {
+  height: 169px;
+  width: 300px;
+  position: relative;
+}
+
+.movieCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.movieCardOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2); /* Dark overlay with transparency */
+}
+
+.movieCardContent {
+  position: absolute;
+  bottom: 10px;
+  color: white;
+  font-size: 24px;
+  margin: 10px;
+  line-height: 1;
+}
+
+.category {
+  font-size: 12px;
+  margin: 0;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}

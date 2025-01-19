@@ -1,0 +1,15 @@
+{
+  "name": "movie-explorer",
+  "version": "1.0.0",
+  "description": "Catalogue of movies",
+  "main": "no",
+  "scripts": {
+    "start": "concurrently \"npm run start:dev --prefix server\" \"npm run dev --prefix client\""
+  },
+  "author": "Katarina Sekula",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "prettier": "^3.4.2"
+  }
+}
