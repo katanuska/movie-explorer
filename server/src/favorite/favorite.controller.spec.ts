@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { FavoritesController } from './favorites.controller';
-import { FavoritesService } from './favorites.service';
+import { FavoritesController } from './favorite.controller';
+import { FavoritesService } from './favorite.service';
 
 describe('FavouritesController', () => {
   let controller: FavoritesController;

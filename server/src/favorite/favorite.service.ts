@@ -3,18 +3,20 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { MovieService } from 'src/movie/movie.service';
 import { FavoriteMovieDto } from './dto/favorite-movie.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { Movie } from 'src/movie/entities/movie.entity';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class FavoritesService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    private readonly movieService: MovieService,
+    @InjectRepository(Movie)
+    private readonly movieRepository: Repository<Movie>,
   ) {}
 
   async findFavorites(username: string): Promise<FavoriteMovieDto[]> {
@@ -24,7 +26,7 @@ export class FavoritesService {
     });
     if (!user) throw new UnauthorizedException();
 
-    return user.favorites;
+    return plainToInstance(FavoriteMovieDto, user.favorites);
   }
 
   async addToFavorites(movieId: number, username: string): Promise<void> {
@@ -35,7 +37,7 @@ export class FavoritesService {
     if (!user) throw new UnauthorizedException();
     if (user.favorites.some((favorite) => favorite.id === movieId)) return;
 
-    const movie = await this.movieService.findOne(movieId);
+    const movie = await this.movieRepository.findOneBy({ id: movieId });
     if (!movie) throw new NotFoundException('Movie not found');
 
     await this.usersRepository

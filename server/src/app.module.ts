@@ -10,14 +10,15 @@ import { Movie } from './movie/entities/movie.entity';
 import { SeedService } from './config/seed.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { FavoritesModule } from './favorites/favorites.module';
 import jwtConfig from './config/jwt.config';
+import { FavoritesModule } from './favorite/favorite.module';
+import { Actor } from './movie/entities/actor.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [databaseConfig, jwtConfig] }),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
-    TypeOrmModule.forFeature([Movie]),
+    TypeOrmModule.forFeature([Movie, Actor]),
     MovieModule,
     UserModule,
     AuthModule,

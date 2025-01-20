@@ -5,6 +5,11 @@ import ShowFavoriteButton, {
 import './Header.css';
 
 type HeaderProps = ShowFavoriteButtonProps;
+// TODO:
+// type HeaderProps = {
+//   search?: ReactElement;
+//   actions?: ReactElement;
+// };
 
 const Header: React.FC<HeaderProps> = (favoriteButtonProps) => {
   return (

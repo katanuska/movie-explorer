@@ -11,6 +11,7 @@ const ShowFavoriteButton: React.FC<ShowFavoriteButtonProps> = ({
 }) => {
   const { user } = useUser();
 
+  // TODO: guard component through private component
   if (!user) return null;
 
   const buttonText = showFavorite ? 'All movies' : 'Favorite movies';

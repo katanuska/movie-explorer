@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Actor } from './actor.entity';
 
 @Entity()
 export class Movie {
@@ -25,4 +32,8 @@ export class Movie {
 
   @Column('decimal', { precision: 3, scale: 1 })
   rating: number;
+
+  @ManyToMany(() => Actor)
+  @JoinTable()
+  actors: Actor[];
 }

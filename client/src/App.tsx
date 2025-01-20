@@ -1,10 +1,17 @@
+import { BrowserRouter, Route, Routes } from 'react-router';
 import { UserProvider } from './auth/UserContext';
-import MovieCataloguePage from './movie/MovieCataloguePage';
+import MovieDetailsPage from './movie/MovieDetailsPage';
+import MovieCataloguePage from './movie/MoviesPage';
 
 function App() {
   return (
     <UserProvider>
-      <MovieCataloguePage />
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<MovieCataloguePage />} />
+          <Route path=":id" element={<MovieDetailsPage />} />
+        </Routes>
+      </BrowserRouter>
     </UserProvider>
   );
 }

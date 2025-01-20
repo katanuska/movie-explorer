@@ -26,7 +26,6 @@ export class AuthService {
   }
 
   async signup(signupDto: SignupDto): Promise<User> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const user = await this.userService.create(
       signupDto.username,
       signupDto.password,

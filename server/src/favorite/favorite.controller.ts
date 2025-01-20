@@ -9,7 +9,7 @@ import {
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { JwtPayload } from 'src/auth/auth.service';
 import { FavoriteMovieDto } from './dto/favorite-movie.dto';
-import { FavoritesService } from './favorites.service';
+import { FavoritesService } from './favorite.service';
 
 @Controller('user/favorites')
 export class FavoritesController {

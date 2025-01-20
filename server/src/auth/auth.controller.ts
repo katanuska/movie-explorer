@@ -18,6 +18,8 @@ import jwtConfig from 'src/config/jwt.config';
 import { ConfigType } from '@nestjs/config';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
+import { UserDto } from './dto/user.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Controller('auth')
 export class AuthController {
@@ -28,28 +30,22 @@ export class AuthController {
   ) {}
 
   @Get('user')
-  async currentUser(
-    @CurrentUser() currentUser: JwtPayload,
-  ): Promise<Partial<User>> {
+  async currentUser(@CurrentUser() currentUser: JwtPayload): Promise<UserDto> {
     if (!currentUser) throw new UnauthorizedException();
 
     const user = await this.authService.getCurrentUser(currentUser.username);
 
     if (!user) throw new UnauthorizedException();
 
-    const { password, ...result } = user;
-
-    return result;
+    return plainToInstance(UserDto, user);
   }
 
   @Post('signup')
   @Public()
-  async create(@Body() signupDto: SignupDto): Promise<Partial<User>> {
+  async create(@Body() signupDto: SignupDto): Promise<UserDto> {
     const user = await this.authService.signup(signupDto);
 
-    const { password, ...result } = user;
-
-    return result;
+    return plainToInstance(UserDto, user);
   }
 
   @Post('signin')
@@ -67,9 +63,6 @@ export class AuthController {
       this.jwtConfiguration.cookieOptions,
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...result } = user;
-
-    return result;
+    return plainToInstance(UserDto, user);
   }
 }

@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Movie } from './Movie';
-import MovieApiImpl from './MovieApi';
-import Header from '../components/Header';
-import Movies from './Movies';
+import MovieApiImpl from './api/MovieApi';
 import FavoriteApiImpl from './favorite/FavoriteApi';
-import './MovieCataloguePage.css';
+import Header from '../components/Header';
+import Movies from './catalogue/MovieCatalogue';
+import './MoviesPage.css';
 
+//TODO: add search by title and genre
+//TODO: move favorites to separate private page
 const MovieCataloguePage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [showFavorite, setShowFavorite] = useState(false);

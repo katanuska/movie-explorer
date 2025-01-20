@@ -1,10 +1,6 @@
-export type Movie = {
+export interface Movie {
   id: number;
   title: string;
-  releaseYear: number;
   genre: string;
-  runtime: number;
-  language: string;
   posterUrl: string;
-  rating: number;
-};
+}

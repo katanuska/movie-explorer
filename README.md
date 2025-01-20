@@ -61,7 +61,7 @@ rating, etc.
 
 ### Web application
 Web application contains pages for
-- A login/signup page for authentication.
+- A sign in/sign up page for authentication.
 - A public page showing a list of movies and a way to favorite movies.
 - A protected "Favorites" page where users can view and remove their
 favorite movies.
@@ -69,7 +69,15 @@ favorite movies.
 
 ## REST API
 
-### Featch public list of movies
+### Sign up
+
+### Sign in
+
+### Sign out
+
+### Get current user
+
+### Fetch public list of movies
 
 ### Search movies by title or other attributes (e.g., genre, release year)
 
