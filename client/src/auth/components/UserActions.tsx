@@ -30,7 +30,9 @@ const UserActions = () => {
     <div className="user-button">
       {user ? (
         <>
-          <div className="user-button">Welcome {user?.username}!</div>
+          <div className="user-button">
+            Welcome <b>{user?.username}</b>!
+          </div>
         </>
       ) : (
         <button className="light" onClick={handleOpenSignIn}>

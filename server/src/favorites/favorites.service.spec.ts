@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FavoritesService } from './favorites.service';
 
-describe('FavouritesService', () => {
+describe('FavoritesService', () => {
   let service: FavoritesService;
 
   beforeEach(async () => {

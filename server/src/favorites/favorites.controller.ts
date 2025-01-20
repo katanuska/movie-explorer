@@ -2,46 +2,37 @@ import {
   Controller,
   Get,
   Post,
-  Body,
-  Patch,
   Param,
   Delete,
-  Request,
+  ParseIntPipe,
 } from '@nestjs/common';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { JwtPayload } from 'src/auth/auth.service';
+import { FavoriteMovieDto } from './dto/favorite-movie.dto';
 import { FavoritesService } from './favorites.service';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
 
-@Controller('favorite')
+@Controller('user/favorites')
 export class FavoritesController {
-  constructor(private readonly favoritesService: FavoritesService) {}
+  constructor(private readonly favoriteService: FavoritesService) {}
 
-  @Post()
-  create(@Body() createFavoriteDto: CreateFavoriteDto, @Request() req: any) {
-    // return this.favoritesService.create(createFavoriteDto, currentUser.sub);
-    return req.user;
+  @Get('/')
+  findFavorites(@CurrentUser() user: JwtPayload): Promise<FavoriteMovieDto[]> {
+    return this.favoriteService.findFavorites(user.username);
   }
 
-  @Get()
-  findAll() {
-    return this.favoritesService.findAll();
+  @Post('/:movieId')
+  addToFavorite(
+    @Param('movieId', ParseIntPipe) movieId: number,
+    @CurrentUser() user: JwtPayload,
+  ): Promise<void> {
+    return this.favoriteService.addToFavorites(movieId, user.username);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.favoritesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateFavoriteDto: UpdateFavoriteDto,
-  ) {
-    return this.favoritesService.update(+id, updateFavoriteDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.favoritesService.remove(+id);
+  @Delete(':movieId')
+  removeFromFavorite(
+    @Param('movieId', ParseIntPipe) movieId: number,
+    @CurrentUser() user: JwtPayload,
+  ): Promise<void> {
+    return this.favoriteService.removeFromFavorites(movieId, user.username);
   }
 }

@@ -1,0 +1,21 @@
+.add-to-favorite-container {
+  position: relative;
+}
+
+.add-to-favorite-container button {
+  display: none;
+  z-index: 1;
+}
+
+.add-to-favorite-container:hover button {
+  display: block;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.add-to-favorite-container button img {
+  width: 15px;
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(88deg) brightness(105%)
+    contrast(103%);
+}

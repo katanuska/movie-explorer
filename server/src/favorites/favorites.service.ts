@@ -1,43 +1,61 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFavoriteDto as CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto as UpdateFavoriteDto } from './dto/update-favorite.dto';
-import { Favorite } from './entities/favorite.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from 'src/user/entities/user.entity';
-import { Movie } from 'src/movie/entities/movie.entity';
-import { AuthService } from 'src/auth/auth.service';
-import { UserService } from 'src/user/user.service';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { MovieService } from 'src/movie/movie.service';
+import { FavoriteMovieDto } from './dto/favorite-movie.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class FavoritesService {
   constructor(
-    @InjectRepository(Favorite)
-    private readonly movieRepository: Repository<Favorite>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
     private readonly movieService: MovieService,
-    private readonly userService: UserService,
   ) {}
 
-  async create(createFavoriteDto: CreateFavoriteDto, userId: number) {
-    // const user = await this.userService.findOne({ where: { id: userId } });
+  async findFavorites(username: string): Promise<FavoriteMovieDto[]> {
+    const user = await this.usersRepository.findOne({
+      where: { username: username },
+      relations: ['favorites'],
+    });
+    if (!user) throw new UnauthorizedException();
 
-    return 'This action adds a new favourite';
+    return user.favorites;
   }
 
-  findAll() {
-    return `This action returns all favourites`;
+  async addToFavorites(movieId: number, username: string): Promise<void> {
+    const user = await this.usersRepository.findOne({
+      where: { username: username },
+      relations: ['favorites'],
+    });
+    if (!user) throw new UnauthorizedException();
+    if (user.favorites.some((favorite) => favorite.id === movieId)) return;
+
+    const movie = await this.movieService.findOne(movieId);
+    if (!movie) throw new NotFoundException('Movie not found');
+
+    await this.usersRepository
+      .createQueryBuilder()
+      .relation(User, 'favorites')
+      .of(user)
+      .add(movieId);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} favourite`;
-  }
+  async removeFromFavorites(movieId: number, username: string): Promise<void> {
+    const user = await this.usersRepository.findOne({
+      where: { username: username },
+      relations: ['favorites'],
+    });
+    if (!user) throw new UnauthorizedException();
 
-  update(id: number, updateFavoriteDto: UpdateFavoriteDto) {
-    return `This action updates a #${id} favourite`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} favourite`;
+    await this.usersRepository
+      .createQueryBuilder()
+      .relation(User, 'favorites')
+      .of(user)
+      .remove(movieId);
   }
 }

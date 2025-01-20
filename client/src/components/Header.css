@@ -1,0 +1,15 @@
+header {
+  width: 100%;
+  background-color: #0071bc;
+  margin-bottom: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header-content {
+  width: 100%;
+  color: white;
+  display: flex;
+  justify-content: end;
+}

@@ -22,7 +22,7 @@ server/.env.*.local
 
 # Client (Vite React)
 client/node_modules/
-client/public/
+client/dist/
 client/.env
 client/.env.*.local
 client/.vite/

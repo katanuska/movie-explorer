@@ -1,13 +1,16 @@
 import UserActions from '../auth/components/UserActions';
-import FavoriteButton, { FavoriteButtonProps } from './FavoriteButton';
+import ShowFavoriteButton, {
+  ShowFavoriteButtonProps,
+} from '../movie/favorite/ShowFavoritesButton';
+import './Header.css';
 
-type HeaderProps = FavoriteButtonProps;
+type HeaderProps = ShowFavoriteButtonProps;
 
 const Header: React.FC<HeaderProps> = (favoriteButtonProps) => {
   return (
     <header>
       <div className="header-content">
-        <FavoriteButton {...favoriteButtonProps} />
+        <ShowFavoriteButton {...favoriteButtonProps} />
         <UserActions />
       </div>
     </header>

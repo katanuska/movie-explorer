@@ -3,9 +3,12 @@ import { Movie } from './Movie';
 import MovieApiImpl from './MovieApi';
 import Header from '../components/Header';
 import Movies from './Movies';
+import FavoriteApiImpl from './favorite/FavoriteApi';
+import './MovieCataloguePage.css';
 
 const MovieCataloguePage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [showFavorite, setShowFavorite] = useState(false);
 
   const getAllMovies = useCallback(async () => {
     const allMovies = await MovieApiImpl.loadAll();
@@ -13,19 +16,26 @@ const MovieCataloguePage: React.FC = () => {
   }, []);
 
   const getFavoriteMovies = useCallback(async () => {
-    const favorites = await MovieApiImpl.loadFavorite();
+    const favorites = await FavoriteApiImpl.loadFavorites();
     setMovies(favorites);
   }, []);
 
   useEffect(() => {
-    getAllMovies();
-  }, [getAllMovies]);
+    if (showFavorite) {
+      getFavoriteMovies();
+    } else {
+      getAllMovies();
+    }
+  }, [showFavorite, getAllMovies, getFavoriteMovies]);
 
   return (
     <>
-      <Header onShowFavorite={getFavoriteMovies} onShowAll={getAllMovies} />
+      <Header
+        onShowFavoriteToggle={() => setShowFavorite((favorites) => !favorites)}
+        showFavorite={showFavorite}
+      />
       <div className="page-content">
-        <Movies movies={movies} />
+        <Movies movies={movies} favorite={showFavorite} />
       </div>
     </>
   );

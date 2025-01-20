@@ -1,4 +1,3 @@
-import './App.css';
 import { UserProvider } from './auth/UserContext';
 import MovieCataloguePage from './movie/MovieCataloguePage';
 

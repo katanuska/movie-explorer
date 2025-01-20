@@ -1,5 +1,11 @@
-import { Favorite } from 'src/favorites/entities/favorite.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Movie } from 'src/movie/entities/movie.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -12,9 +18,7 @@ export class User {
   @Column({ nullable: false })
   password: string;
 
-  @OneToMany(() => Favorite, (favorite) => favorite.user, {
-    onDelete: 'CASCADE',
-    lazy: true,
-  })
-  favorites: Favorite[];
+  @ManyToMany(() => Movie)
+  @JoinTable()
+  favorites: Movie[];
 }
