@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import FavoriteApi from './FavoriteApi';
+import FavoriteApi from '../api/FavoriteApi';
 import { useUser } from '../../auth/UserContext';
 import './MarkFavorite.css';
 
@@ -14,7 +14,6 @@ const MarkFavorite: React.FC<React.PropsWithChildren<MarkFavoriteProps>> = ({
   children,
 }) => {
   const { user } = useUser();
-  const showFavorite = !!user;
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
@@ -32,7 +31,7 @@ const MarkFavorite: React.FC<React.PropsWithChildren<MarkFavoriteProps>> = ({
     setFavorite(false);
   };
 
-  if (!showFavorite) {
+  if (!user) {
     return children;
   }
 

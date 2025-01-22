@@ -1,0 +1,17 @@
+h1 {
+  margin: 1.5rem 0;
+}
+
+.movie-details {
+  flex-direction: row;
+  flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.actors {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-gap: 30px;
+}

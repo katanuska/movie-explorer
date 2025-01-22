@@ -10,6 +10,7 @@ export interface MovieDetails extends Movie {
   rating: number;
 
   actors: {
+    id: number;
     name: string;
     imageUrl: string;
     character: string;

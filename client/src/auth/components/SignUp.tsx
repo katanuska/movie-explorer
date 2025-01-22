@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { apiFetch } from '../../api';
 import './Auth.css';
+import { useUser } from '../UserContext';
 
 type SignUpProps = {
   onSignIn: () => void;
@@ -8,16 +8,15 @@ type SignUpProps = {
   onError?: () => void;
 };
 
+// TODO: Add forgot password
 const SignUp: React.FC<SignUpProps> = ({ onSignIn, onSuccess, onError }) => {
-  // TODO: Add forgot password
-
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   });
-  const [signUpResult, setSignUpResult] = useState<'success' | 'error' | null>(
-    null,
-  );
+  const [error, setError] = useState<boolean>(false);
+
+  const { signUp } = useUser();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -31,14 +30,11 @@ const SignUp: React.FC<SignUpProps> = ({ onSignIn, onSuccess, onError }) => {
 
     e.preventDefault();
     try {
-      await apiFetch('/auth/signup', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-      });
-      setSignUpResult('success');
+      const { password, ...user } = formData;
+      await signUp(user, password);
       onSuccess?.();
     } catch (e) {
-      setSignUpResult('error');
+      setError(true);
       onError?.();
     }
   };
@@ -50,6 +46,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignIn, onSuccess, onError }) => {
         <div className="form-control">
           <label htmlFor="username">Username</label>
           <input
+            minLength={4}
             type="text"
             id="username"
             name="username"
@@ -61,6 +58,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignIn, onSuccess, onError }) => {
         <div className="form-control">
           <label htmlFor="password">Password</label>
           <input
+            minLength={8}
             type="password"
             id="password"
             name="password"
@@ -72,7 +70,7 @@ const SignUp: React.FC<SignUpProps> = ({ onSignIn, onSuccess, onError }) => {
         </div>
 
         <button type="submit">Sign Up</button>
-        {signUpResult === 'error' && <div>Error signing up.</div>}
+        {error && <div>Error signing up.</div>}
       </form>
       <div>
         Have an account?{' '}

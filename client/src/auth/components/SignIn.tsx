@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { LoginCredentials } from '../model/LoginCredentials';
 import { useUser } from '../UserContext';
-import AuthApiImpl from '../AuthApi';
 import './Auth.css';
 
 type SignInProps = {
@@ -30,8 +29,7 @@ const SignIn: React.FC<SignInProps> = ({ onSignUp, onSuccess, onError }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const signedUser = await AuthApiImpl.signIn(formData);
-      signIn(signedUser);
+      await signIn(formData);
       onSuccess?.();
     } catch (error) {
       setError(true);

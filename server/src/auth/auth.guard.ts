@@ -23,8 +23,6 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log('User verification start...');
-
     if (this.isPublicRoute(context)) return true;
 
     const request = context.switchToHttp().getRequest();
@@ -41,7 +39,6 @@ export class AuthGuard implements CanActivate {
     ]);
 
     if (isPublic) {
-      console.log('Public route');
       return true;
     }
     return false;
@@ -53,12 +50,10 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      console.log('Verify token ', token);
       return await this.jwtService.verifyAsync(token, {
         secret: this.jwtConfiguration.secret,
       });
     } catch {
-      console.log('User verification error');
       throw new UnauthorizedException();
     }
   }

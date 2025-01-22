@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import MovieApi from './api/MovieApi';
-import { MovieDetails } from './MovieDetails';
+import { MovieDetails } from './model/MovieDetails';
+import Header from '../components/Header';
+import './MovieDetailsPage.css';
 
 const MovieDetailsPage: React.FC = () => {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
@@ -22,25 +24,35 @@ const MovieDetailsPage: React.FC = () => {
   if (!movie) return null;
 
   return (
-    <div>
-      <div>Title: {movie.title}</div>
-      <div>Genre: {movie.genre}</div>
-      <div>Language: {movie.language}</div>
-      <div>Rating: {movie.rating}</div>
-      <div>Release year: {movie.releaseYear}</div>
-      <div>Runtime: {movie.runtime}</div>
-      <img src={movie.posterUrl} alt={movie.title} />
-      <div>
-        Cast:{' '}
+    <>
+      <Header actions={<Link to="/">Show all movies</Link>} />
+      <div className="movie-details">
+        <div>
+          <img src={movie.posterUrl} alt={movie.title} />
+        </div>
+        <div>
+          <h1>{movie.title}</h1>
+          <p>Genre: {movie.genre}</p>
+          <p>Language: {movie.language}</p>
+          <p>Rating: {movie.rating}</p>
+          <p>Release year: {movie.releaseYear}</p>
+          <p>Runtime: {movie.runtime}</p>
+        </div>
+      </div>
+      <h2>Cast:</h2>
+      <div className="actors">
         {movie.actors?.map((actor) => (
-          <div>
-            <div>Name: {actor.name}</div>
-            <div>Character: {actor.character}</div>
+          <div key={actor.id} className="actor-card">
             <img src={actor.imageUrl} alt={actor.name} />
+            <div>Character: {actor.character}</div>
+
+            <div>
+              <b>{actor.name}</b>
+            </div>
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

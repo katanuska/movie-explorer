@@ -1,23 +1,26 @@
 import { NavLink } from 'react-router';
 import MarkFavorite from '../favorite/MarkFavorite';
-import { Movie } from '../Movie';
+import { Movie } from '../model/Movie';
 import './MovieCatalogue.css';
 
-type MoviesProps = {
+type MovieCatalogueProps = {
   movies: Movie[];
-  favorite: boolean;
+  defaultFavorite: boolean;
 };
 
-const Movies: React.FC<MoviesProps> = ({ movies, favorite }) => {
+const MovieCatalogue: React.FC<MovieCatalogueProps> = ({
+  movies,
+  defaultFavorite,
+}) => {
   return (
-    <div className="movieList">
+    <div className="movie-list">
       {movies?.map((movie: Movie) => (
         <div className="card" key={movie.id}>
-          <MarkFavorite id={movie.id} defaultFavorite={favorite}>
-            <NavLink to={`/${movie.id}`} className="movieCard">
+          <MarkFavorite id={movie.id} defaultFavorite={defaultFavorite}>
+            <NavLink to={`/${movie.id}`} className="movie-card">
               <img src={movie.posterUrl} alt={movie.title} />
-              <div className="movieCardOverlay"></div>
-              <div className="movieCardContent">
+              <div className="movie-card-overlay"></div>
+              <div className="movie-card-content">
                 <p className="category">{movie.genre}</p>
                 <p className="title">{movie.title}</p>
               </div>
@@ -29,4 +32,4 @@ const Movies: React.FC<MoviesProps> = ({ movies, favorite }) => {
   );
 };
 
-export default Movies;
+export default MovieCatalogue;

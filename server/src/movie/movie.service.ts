@@ -22,13 +22,10 @@ export class MovieService {
   async findOne(id: number): Promise<MovieDetailsDto> {
     const movie = await this.movieRepository.findOne({
       where: { id },
-      relations: ['actors'],
+      relations: { actors: true },
     });
 
     if (!movie) throw new NotFoundException('Movie not found');
-
-    console.log(movie);
-    console.log(plainToInstance(MovieDetailsDto, movie));
 
     return plainToInstance(MovieDetailsDto, movie);
   }

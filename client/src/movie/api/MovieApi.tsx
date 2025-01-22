@@ -1,6 +1,6 @@
 import { apiFetch } from '../../api';
-import { Movie } from '../Movie';
-import { MovieDetails } from '../MovieDetails';
+import { Movie } from '../model/Movie';
+import { MovieDetails } from '../model/MovieDetails';
 
 const MovieApi = {
   loadAll: (): Promise<Movie[]> => {

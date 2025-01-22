@@ -25,14 +25,6 @@ export class AuthService {
     return this.userService.findOne(username);
   }
 
-  async signup(signupDto: SignupDto): Promise<User> {
-    const user = await this.userService.create(
-      signupDto.username,
-      signupDto.password,
-    );
-    return user;
-  }
-
   async validateUser(username: string, password: string): Promise<User | null> {
     const user = await this.userService.findOne(username);
 
@@ -50,6 +42,17 @@ export class AuthService {
     };
 
     return this.jwtService.signAsync(payload);
+  }
+
+  async signup(
+    signupDto: SignupDto,
+  ): Promise<{ jwtToken: string; user: User }> {
+    const user = await this.userService.create(
+      signupDto.username,
+      signupDto.password,
+    );
+    const jwtToken = await this.createJwtToken(user);
+    return { jwtToken, user };
   }
 
   async signin(loginDTO: SignInDto): Promise<{ jwtToken: string; user: User }> {

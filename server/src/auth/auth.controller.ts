@@ -42,8 +42,13 @@ export class AuthController {
 
   @Post('signup')
   @Public()
-  async create(@Body() signupDto: SignupDto): Promise<UserDto> {
-    const user = await this.authService.signup(signupDto);
+  async signup(
+    @Res({ passthrough: true }) response: Response,
+    @Body() signupDto: SignupDto,
+  ): Promise<UserDto> {
+    const { user, jwtToken } = await this.authService.signup(signupDto);
+
+    this.setJwtCookie(response, jwtToken);
 
     return plainToInstance(UserDto, user);
   }
@@ -57,12 +62,23 @@ export class AuthController {
   ): Promise<Partial<User> | null> {
     const { user, jwtToken } = await this.authService.signin(signInDto);
 
+    this.setJwtCookie(response, jwtToken);
+
+    return plainToInstance(UserDto, user);
+  }
+
+  @Post('signout')
+  @HttpCode(204)
+  async signout(@Res({ passthrough: true }) response: Response): Promise<void> {
+    const { maxAge, ...options } = this.jwtConfiguration.cookieOptions;
+    response.clearCookie(this.jwtConfiguration.cookieName, options);
+  }
+
+  private setJwtCookie(response: Response, jwtToken: string): void {
     response.cookie(
       this.jwtConfiguration.cookieName,
       jwtToken,
       this.jwtConfiguration.cookieOptions,
     );
-
-    return plainToInstance(UserDto, user);
   }
 }

@@ -1,21 +1,18 @@
+import { ReactElement } from 'react';
 import UserActions from '../auth/components/UserActions';
-import ShowFavoriteButton, {
-  ShowFavoriteButtonProps,
-} from '../movie/favorite/ShowFavoritesButton';
 import './Header.css';
 
-type HeaderProps = ShowFavoriteButtonProps;
-// TODO:
-// type HeaderProps = {
-//   search?: ReactElement;
-//   actions?: ReactElement;
-// };
+type HeaderProps = {
+  search?: ReactElement;
+  actions?: ReactElement;
+};
 
-const Header: React.FC<HeaderProps> = (favoriteButtonProps) => {
+const Header: React.FC<HeaderProps> = ({ search, actions }) => {
   return (
     <header>
-      <div className="header-content">
-        <ShowFavoriteButton {...favoriteButtonProps} />
+      {actions && <div className="actions">{actions}</div>}
+      {search && <div className="search">{search}</div>}
+      <div className="user">
         <UserActions />
       </div>
     </header>

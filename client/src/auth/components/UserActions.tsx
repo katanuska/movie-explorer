@@ -4,12 +4,14 @@ import { useUser } from '../UserContext';
 import Modal from '../../components/Modal';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
+import { useNavigate } from 'react-router';
 
 const UserActions = () => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [action, setAction] = useState<'signUp' | 'signIn' | null>(null);
 
-  const { user } = useUser();
+  const { user, signOut } = useUser();
+  const navigate = useNavigate();
 
   const handleOpenSignUp = () => {
     setModalOpen(true);
@@ -26,6 +28,11 @@ const UserActions = () => {
     setAction(null);
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
   return (
     <div className="user-button">
       {user ? (
@@ -33,6 +40,9 @@ const UserActions = () => {
           <div className="user-button">
             Welcome <b>{user?.username}</b>!
           </div>
+          <button className="light" onClick={handleSignOut}>
+            Sign out
+          </button>
         </>
       ) : (
         <button className="light" onClick={handleOpenSignIn}>
@@ -44,7 +54,9 @@ const UserActions = () => {
         {action === 'signIn' && (
           <SignIn onSuccess={handleModalClose} onSignUp={handleOpenSignUp} />
         )}
-        {action === 'signUp' && <SignUp onSignIn={handleOpenSignIn} />}
+        {action === 'signUp' && (
+          <SignUp onSuccess={handleModalClose} onSignIn={handleOpenSignIn} />
+        )}
       </Modal>
     </div>
   );

@@ -3,12 +3,12 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { FavoriteMovieDto } from './dto/favorite-movie.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Movie } from 'src/movie/entities/movie.entity';
 import { plainToInstance } from 'class-transformer';
+import { MovieDto } from 'src/movie/dto/movie.dto';
 
 @Injectable()
 export class FavoritesService {
@@ -19,20 +19,20 @@ export class FavoritesService {
     private readonly movieRepository: Repository<Movie>,
   ) {}
 
-  async findFavorites(username: string): Promise<FavoriteMovieDto[]> {
+  async findFavorites(username: string): Promise<MovieDto[]> {
     const user = await this.usersRepository.findOne({
       where: { username: username },
-      relations: ['favorites'],
+      relations: { favorites: true },
     });
     if (!user) throw new UnauthorizedException();
 
-    return plainToInstance(FavoriteMovieDto, user.favorites);
+    return plainToInstance(MovieDto, user.favorites);
   }
 
   async addToFavorites(movieId: number, username: string): Promise<void> {
     const user = await this.usersRepository.findOne({
       where: { username: username },
-      relations: ['favorites'],
+      relations: { favorites: true },
     });
     if (!user) throw new UnauthorizedException();
     if (user.favorites.some((favorite) => favorite.id === movieId)) return;

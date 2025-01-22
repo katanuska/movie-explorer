@@ -3,13 +3,39 @@ header {
   background-color: #0071bc;
   margin-bottom: 35px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-}
+  gap: 10px;
 
-.header-content {
-  width: 100%;
-  color: white;
-  display: flex;
-  justify-content: end;
+  a {
+    display: block;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    margin: 10px;
+    text-decoration: none;
+  }
+
+  a:focus {
+    border: none;
+  }
+
+  a:hover {
+    background-color: #ddf2ff;
+  }
+
+  input {
+    margin: 0;
+    width: 400px;
+  }
+
+  .user {
+    margin-left: auto;
+  }
 }

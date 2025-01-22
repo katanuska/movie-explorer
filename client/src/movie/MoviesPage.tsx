@@ -1,44 +1,35 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Movie } from './Movie';
+import { Movie } from './model/Movie';
 import MovieApiImpl from './api/MovieApi';
-import FavoriteApiImpl from './favorite/FavoriteApi';
 import Header from '../components/Header';
-import Movies from './catalogue/MovieCatalogue';
-import './MoviesPage.css';
+import MovieCatalogue from './catalogue/MovieCatalogue';
+import Protected from '../components/Protected';
+import { Link } from 'react-router';
 
 //TODO: add search by title and genre
-//TODO: move favorites to separate private page
 const MovieCataloguePage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [showFavorite, setShowFavorite] = useState(false);
 
   const getAllMovies = useCallback(async () => {
     const allMovies = await MovieApiImpl.loadAll();
     setMovies(allMovies);
   }, []);
 
-  const getFavoriteMovies = useCallback(async () => {
-    const favorites = await FavoriteApiImpl.loadFavorites();
-    setMovies(favorites);
-  }, []);
-
   useEffect(() => {
-    if (showFavorite) {
-      getFavoriteMovies();
-    } else {
-      getAllMovies();
-    }
-  }, [showFavorite, getAllMovies, getFavoriteMovies]);
+    getAllMovies();
+  }, [getAllMovies]);
 
   return (
     <>
       <Header
-        onShowFavoriteToggle={() => setShowFavorite((favorites) => !favorites)}
-        showFavorite={showFavorite}
+        search={<input placeholder="Search movies by title"></input>}
+        actions={
+          <Protected>
+            <Link to="/favorites">Show favorite</Link>
+          </Protected>
+        }
       />
-      <div className="page-content">
-        <Movies movies={movies} favorite={showFavorite} />
-      </div>
+      <MovieCatalogue movies={movies} defaultFavorite={false} />
     </>
   );
 };

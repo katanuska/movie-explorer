@@ -1,5 +1,5 @@
 import { apiFetch } from '../../api';
-import { Movie } from '../Movie';
+import { Movie } from '../model/Movie';
 
 interface FavoriteApi {
   loadFavorites: () => Promise<Movie[]>;

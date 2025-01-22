@@ -7,10 +7,13 @@ import React, {
 } from 'react';
 import AuthApiImpl from './AuthApi';
 import { User } from './model/User';
+import { LoginCredentials } from './model/LoginCredentials';
 
 interface UserContextType {
   user: User | null;
-  signIn: (user: User) => void;
+  signIn: (loginCredentials: LoginCredentials) => Promise<void>;
+  signOut: () => Promise<void>;
+  signUp: (user: User, password: string) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -24,29 +27,46 @@ const CURRENT_USER_KEY = 'currentUser';
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  //TODO: implement signout
   const loadCurrentUser = async () => {
-    const currentUser = await AuthApiImpl.getCurrentUser();
+    try {
+      const currentUser = await AuthApiImpl.getCurrentUser();
 
-    if (currentUser) {
-      setUser(currentUser);
-      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
-    } else {
-      // localStorage.removeItem(CURRENT_USER_KEY);
+      if (currentUser) {
+        setUser(currentUser);
+        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
+      } else {
+        setUser(null);
+        localStorage.removeItem(CURRENT_USER_KEY);
+      }
+    } catch (e) {
+      setUser(null);
+      localStorage.removeItem(CURRENT_USER_KEY);
     }
-  };
-
-  const signIn = (user: User) => {
-    setUser(user);
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
   };
 
   useEffect(() => {
     loadCurrentUser();
   }, []);
 
+  const signUp = async (user: User, password: string) => {
+    const createdUser = await AuthApiImpl.signUp(user, password);
+    setUser(createdUser);
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(createdUser));
+  };
+
+  const signIn = async (loginCredentials: LoginCredentials): Promise<void> => {
+    const user = await AuthApiImpl.signIn(loginCredentials);
+    setUser(user);
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+  };
+
+  const signOut = async (): Promise<void> => {
+    await AuthApiImpl.signOut();
+    setUser(null);
+  };
+
   return (
-    <UserContext.Provider value={{ user, signIn }}>
+    <UserContext.Provider value={{ user, signIn, signOut, signUp }}>
       {children}
     </UserContext.Provider>
   );

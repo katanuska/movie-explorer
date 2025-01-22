@@ -3,54 +3,42 @@
 This app is a simplified version designed to let users browse through a catalogue of
 movies and save their personal favorites.
 
-## Run application
+## Application setup
 
-### Server configuration
+### Server environment variables
 
-Environment variables
+| Name              | Default value | Required  | Description                                      |
+|-----------------  |---------------|-----------|--------------------------------------------------|
+| NODE_ENV          | production    | false     | Environment (e.g., `development` or `production` |           
+| POSTGRES_HOST     | localhost     | false     | Database host                                    |
+| POSTGRES_PORT     | 5432          | false     | Database port                                    |
+| POSTGRES_USER     |               | true      | Database user                                    |
+| POSTGRES_PASSWORD |               | true      | User password for PostgreSQL                     |
+| POSTGRES_DB       |               | true      | Database name                                    |
+| JWT_SECRET        |               | true      | Key used for signing JWT tokens                  |
+| JWT_EXPIRATiON    | 3600000       | false     | JWT toke expiration time in milliseconds         |
 
-| Name              | Default value | Required  | Description                                   |
-|-----------------  |---------------|-----------|-----------------------------------------------|
-| NODE_ENV          | production    | false     | development or production                     |           
-| PORT              | 3000          | false     | Port number on which the server should listen |
-| POSTGRES_HOST     | localhost     | false     | Database host                                 |
-| POSTGRES_PORT     | 5432          | false     | Database port                                 |
-| POSTGRES_USER     |               | true      | Database user                                 |
-| POSTGRES_PASSWORD |               | true      | User password for PostgreSQL                  |
-| POSTGRES_DATABASE |               | true      | Database name                                 |
-| JWT_SECRET        |               | true      | Key used for signing JWT tokens               |
-| JWT_EXPIRATiON    | 3600000       | false     | JWT toke expiration time in milliseconds      |
-
-### Development
-To run server and client in development mode run `docker-compose up -d`, `npm install` and `npm start`.
-To run server alone run `cd server`, `npm install` and `npm run start:dev`.
-To run client alone run `cd client`, `npm install` and `npm run start`.
-
-
-### Production
-`docker-compose up -d`
-
-`cd server`
-`npm install`
-`npm run start:prod`
-
-`cd client`
-`npm run build`
-
-
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
+### Development Setup
+- Start the PostgreSQL database:
+`docker-compose up -d postgres`
+- Create an `.env` file to `server` folder and set the required environment variables.
+- Install dependencies and start **server**. Server startup in development mode will seed test user (u/p: test-user/test), movies and actors for testing purposes.
+```
+cd server
+npm install
+npm run start:dev
+```
+- Install dependencies and start **client**
+```
+cd server
+npm install
+npm run dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-
+### Production Setup
+Build and run the application along with the PostgreSQL database using Docker Compose:
+`docker-compose up --build`
+Application is available at port 80.
 
 
 ## Key features

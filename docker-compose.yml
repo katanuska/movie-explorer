@@ -13,5 +13,29 @@ services:
       POSTGRES_PASSWORD: pass
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: ./server
+    ports:
+      - '3000:3000'
+    environment:
+      POSTGRES_HOST : postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: movies
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      NODE_ENV: production
+      JWT_SECRET: 214f2959b92a23f5a4c5128975c8a841a0485af0e
+    depends_on:
+      - postgres
+
+  client:
+    build:
+      context: ./client
+    ports:
+      - '80:80'
+    depends_on:
+      - server
 volumes:
   postgres_data:

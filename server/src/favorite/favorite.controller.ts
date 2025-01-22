@@ -8,15 +8,15 @@ import {
 } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { JwtPayload } from 'src/auth/auth.service';
-import { FavoriteMovieDto } from './dto/favorite-movie.dto';
 import { FavoritesService } from './favorite.service';
+import { MovieDto } from 'src/movie/dto/movie.dto';
 
 @Controller('user/favorites')
 export class FavoritesController {
   constructor(private readonly favoriteService: FavoritesService) {}
 
   @Get('/')
-  findFavorites(@CurrentUser() user: JwtPayload): Promise<FavoriteMovieDto[]> {
+  findFavorites(@CurrentUser() user: JwtPayload): Promise<MovieDto[]> {
     return this.favoriteService.findFavorites(user.username);
   }
 
