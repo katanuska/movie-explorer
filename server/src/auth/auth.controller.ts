@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Controller,
   Post,
@@ -49,7 +48,7 @@ export class AuthController {
   ): Promise<UserDto> {
     const { user, jwtToken } = await this.authService.signup(signupDto);
 
-    this.setJwtCookie(response, jwtToken);
+    this.authService.setJwtCookie(response, jwtToken);
 
     return plainToInstance(UserDto, user);
   }
@@ -63,7 +62,7 @@ export class AuthController {
   ): Promise<Partial<User> | null> {
     const { user, jwtToken } = await this.authService.signin(signInDto);
 
-    this.setJwtCookie(response, jwtToken);
+    this.authService.setJwtCookie(response, jwtToken);
 
     return plainToInstance(UserDto, user);
   }
@@ -71,15 +70,8 @@ export class AuthController {
   @Post('signout')
   @HttpCode(204)
   async signout(@Res({ passthrough: true }) response: Response): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { maxAge, ...options } = this.jwtConfiguration.cookieOptions;
     response.clearCookie(this.jwtConfiguration.cookieName, options);
-  }
-
-  private setJwtCookie(response: Response, jwtToken: string): void {
-    response.cookie(
-      this.jwtConfiguration.cookieName,
-      jwtToken,
-      this.jwtConfiguration.cookieOptions,
-    );
   }
 }

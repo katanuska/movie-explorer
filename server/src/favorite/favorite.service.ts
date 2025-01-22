@@ -20,22 +20,15 @@ export class FavoritesService {
   ) {}
 
   async findFavorites(username: string): Promise<MovieDto[]> {
-    const user = await this.usersRepository.findOne({
-      where: { username: username },
-      relations: { favorites: true },
-    });
-    if (!user) throw new UnauthorizedException();
-
+    const user = await this.findUserWithFavorites(username);
     return plainToInstance(MovieDto, user.favorites);
   }
 
-  async addToFavorites(movieId: number, username: string): Promise<void> {
-    const user = await this.usersRepository.findOne({
-      where: { username: username },
-      relations: { favorites: true },
-    });
-    if (!user) throw new UnauthorizedException();
-    if (user.favorites.some((favorite) => favorite.id === movieId)) return;
+  async addToFavorites(movieId: number, username: string): Promise<boolean> {
+    const user = await this.findUserWithFavorites(username);
+
+    if (user.favorites.some((favorite) => favorite.id === movieId))
+      return false;
 
     const movie = await this.movieRepository.findOneBy({ id: movieId });
     if (!movie) throw new NotFoundException('Movie not found');
@@ -45,19 +38,30 @@ export class FavoritesService {
       .relation(User, 'favorites')
       .of(user)
       .add(movieId);
+
+    return true;
   }
 
   async removeFromFavorites(movieId: number, username: string): Promise<void> {
-    const user = await this.usersRepository.findOne({
-      where: { username: username },
-      relations: ['favorites'],
-    });
-    if (!user) throw new UnauthorizedException();
+    const user = await this.findUserWithFavorites(username);
 
     await this.usersRepository
       .createQueryBuilder()
       .relation(User, 'favorites')
       .of(user)
       .remove(movieId);
+  }
+
+  private async findUserWithFavorites(username: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { username },
+      relations: { favorites: true },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return user;
   }
 }

@@ -9,7 +9,7 @@ movies and save their personal favorites.
 
 | Name              | Default value | Required  | Description                                      |
 |-----------------  |---------------|-----------|--------------------------------------------------|
-| NODE_ENV          | production    | false     | Environment (e.g., `development` or `production` |           
+| NODE_ENV          | production    | false     | Environment (e.g., `development` or `production`) |           
 | POSTGRES_HOST     | localhost     | false     | Database host                                    |
 | POSTGRES_PORT     | 5432          | false     | Database port                                    |
 | POSTGRES_USER     |               | true      | Database user                                    |
@@ -20,7 +20,9 @@ movies and save their personal favorites.
 
 ### Development Setup
 - Start the PostgreSQL database:
-`docker-compose up -d postgres`
+```bash
+docker-compose up -d postgres
+```
 - Create an `.env` file to `server` folder and set the required environment variables.
 - Install dependencies and start **server**. Server startup in development mode will seed test user (u/p: test-user/test), movies and actors for testing purposes.
 ```bash
@@ -67,7 +69,7 @@ The backend is implemented using NestJS, one of the most popular Node.js framewo
 PostgreSQL is the chosen database for this application, offering a powerful, open-source, and free solution. It supports complex queries and full-text search, making it suitable for a variety of use cases. Known for its extensibility, PostgreSQL allows custom functions and integrations to meet specific application needs. Additionally, it benefits from a strong community and excellent documentation, ensuring reliable support and continuous improvements.
 
 ### Frontend
-Frontend is implemented as SPA using React
+Frontend is implemented as SPA using React and Typescript.
 
 
 ## REST API
@@ -122,9 +124,6 @@ Frontend is implemented as SPA using React
 {
   "id": "string",
   "username": "string",
-  "email": "string",
-  "firstName": "string",
-  "lastName": "string"
 }
 ```
 

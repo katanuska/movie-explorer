@@ -1,13 +1,7 @@
 import { apiFetch } from '../../api';
 import { Movie } from '../model/Movie';
 
-interface FavoriteApi {
-  loadFavorites: () => Promise<Movie[]>;
-  addToFavorite: (movieId: number) => Promise<void>;
-  removeFromFavorite: (movieId: number) => Promise<void>;
-}
-
-const FavoriteApiImpl: FavoriteApi = {
+const FavoriteApi = {
   loadFavorites: async () => {
     const favorites = await apiFetch('/user/favorites', { method: 'GET' });
     return favorites as Movie[];
@@ -24,4 +18,4 @@ const FavoriteApiImpl: FavoriteApi = {
   },
 };
 
-export default FavoriteApiImpl;
+export default FavoriteApi;

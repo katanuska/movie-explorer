@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { MovieModule } from './movie/movie.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
@@ -23,6 +22,6 @@ import { Actor } from './movie/entities/actor.entity';
     AuthModule,
     FavoritesModule,
   ],
-  providers: [AppService, SeedService],
+  providers: [SeedService],
 })
 export class AppModule {}

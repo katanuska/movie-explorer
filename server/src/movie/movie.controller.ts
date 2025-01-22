@@ -11,7 +11,6 @@ export class MovieController {
 
   @Get()
   async findAll(@Query('title') title?: string): Promise<MovieDto[]> {
-    console.log('get movies ', title);
     return this.movieService.findAll(title);
   }
 

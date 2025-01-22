@@ -9,7 +9,6 @@ type SignInProps = {
   onError?: () => void;
 };
 
-//TODO: move auth to separate page
 const SignIn: React.FC<SignInProps> = ({ onSignUp, onSuccess, onError }) => {
   const [formData, setFormData] = useState<LoginCredentials>({
     username: '',

@@ -5,11 +5,13 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Res,
 } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { JwtPayload } from 'src/auth/auth.service';
 import { FavoritesService } from './favorite.service';
 import { MovieDto } from 'src/movie/dto/movie.dto';
+import { Response } from 'express';
 
 @Controller('user/favorites')
 export class FavoritesController {
@@ -21,11 +23,18 @@ export class FavoritesController {
   }
 
   @Post('/:movieId')
-  addToFavorite(
+  async addToFavorite(
     @Param('movieId', ParseIntPipe) movieId: number,
     @CurrentUser() user: JwtPayload,
+    @Res() response: Response,
   ): Promise<void> {
-    return this.favoriteService.addToFavorites(movieId, user.username);
+    const favoriteAdded = await this.favoriteService.addToFavorites(
+      movieId,
+      user.username,
+    );
+    if (favoriteAdded) response.status(201).send();
+    else
+      response.status(200).json({ message: 'Movie is already in favorites' });
   }
 
   @Delete(':movieId')
