@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Movie } from './entities/movie.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { MovieDto } from './dto/movie.dto';
 import { MovieDetailsDto } from './dto/movie-details.dto';
 import { plainToInstance } from 'class-transformer';
@@ -13,8 +13,13 @@ export class MovieService {
     private readonly movieRepository: Repository<Movie>,
   ) {}
 
-  async findAll(): Promise<MovieDto[]> {
-    const movies = await this.movieRepository.find({ take: 20 }); // TODO: Add pagination
+  async findAll(title?: string): Promise<MovieDto[]> {
+    // TODO: Add pagination
+    const movies = await this.movieRepository.find({
+      where: title ? { title: ILike(`%${title}%`) } : {},
+      take: 20,
+    });
+    // const movies = await this.movieRepository.find({ take: 20 });
 
     return plainToInstance(MovieDto, movies);
   }

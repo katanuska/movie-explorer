@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { MovieDetailsDto } from './dto/movie-details.dto';
@@ -10,8 +10,9 @@ export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
   @Get()
-  async findAll(): Promise<MovieDto[]> {
-    return this.movieService.findAll();
+  async findAll(@Query('title') title?: string): Promise<MovieDto[]> {
+    console.log('get movies ', title);
+    return this.movieService.findAll(title);
   }
 
   @Get(':id')

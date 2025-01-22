@@ -21,6 +21,7 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { UserDto } from './dto/user.dto';
 import { plainToInstance } from 'class-transformer';
 
+// TODO: add refresh token
 @Controller('auth')
 export class AuthController {
   constructor(

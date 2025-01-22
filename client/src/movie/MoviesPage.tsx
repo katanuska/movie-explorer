@@ -1,28 +1,40 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Movie } from './model/Movie';
 import MovieApiImpl from './api/MovieApi';
 import Header from '../components/Header';
 import MovieCatalogue from './catalogue/MovieCatalogue';
 import Protected from '../components/Protected';
 import { Link } from 'react-router';
+import { useDebounce } from 'use-debounce';
 
-//TODO: add search by title and genre
 const MovieCataloguePage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
-
-  const getAllMovies = useCallback(async () => {
-    const allMovies = await MovieApiImpl.loadAll();
-    setMovies(allMovies);
-  }, []);
+  const [search, setSearch] = useState<string>('');
+  const [debouncedSearch] = useDebounce(search, 300); // 300ms debounce
 
   useEffect(() => {
-    getAllMovies();
-  }, [getAllMovies]);
+    const fetchMovies = async () => {
+      const allMovies = await MovieApiImpl.loadAll(debouncedSearch);
+      setMovies(allMovies);
+    };
+
+    fetchMovies();
+  }, [debouncedSearch]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
 
   return (
     <>
       <Header
-        search={<input placeholder="Search movies by title"></input>}
+        search={
+          <input
+            placeholder="Search movies by title"
+            value={search}
+            onChange={handleSearchChange}
+          ></input>
+        }
         actions={
           <Protected>
             <Link to="/favorites">Show favorite</Link>

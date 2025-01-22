@@ -23,13 +23,13 @@ movies and save their personal favorites.
 `docker-compose up -d postgres`
 - Create an `.env` file to `server` folder and set the required environment variables.
 - Install dependencies and start **server**. Server startup in development mode will seed test user (u/p: test-user/test), movies and actors for testing purposes.
-```
+```bash
 cd server
 npm install
 npm run start:dev
 ```
 - Install dependencies and start **client**
-```
+```bash
 cd server
 npm install
 npm run dev
@@ -37,7 +37,9 @@ npm run dev
 
 ### Production Setup
 Build and run the application along with the PostgreSQL database using Docker Compose:
-`docker-compose up --build`
+```bash
+docker-compose up --build
+```
 Application is available at port 80.
 
 
@@ -55,28 +57,7 @@ Web application contains pages for
 favorite movies.
 - Movie details page with extra 1:n or n:n data (e.g. top cast, fun facts...)
 
-## REST API
-
-### Sign up
-
-### Sign in
-
-### Sign out
-
-### Get current user
-
-### Fetch public list of movies
-
-### Search movies by title or other attributes (e.g., genre, release year)
-
-### Save a movie to the user's favorite list
-
-### Retrieve the user's list of favorite movies
-
-### Remove a movie from the user's favorite list
-
-
-## Implementation
+## Used technologies
 
 ### Backend
 The backend is implemented using NestJS, one of the most popular Node.js frameworks. This allows for TypeScript to be used consistently across both frontend and backend development. NestJS offers built-in support for REST APIs and seamless integration with databases, making it easy to develop robust applications. Its structured architecture promotes clean, maintainable, and organized code, adhering to industry best practices. Additionally, the framework benefits from active community support, providing access to a wealth of resources and tools.
@@ -87,3 +68,145 @@ PostgreSQL is the chosen database for this application, offering a powerful, ope
 
 ### Frontend
 Frontend is implemented as SPA using React
+
+
+## REST API
+
+### Authentication API
+#### 1. Get Current User
+- **Endpoint:** `GET /auth/user`
+- **Description:** Retrieves the current authenticated user's details. Available only for authenticated users.
+- **Response:**
+  - **Status Code:** `200 OK`
+  - **Body:**
+```json
+{
+  "id": "string",
+  "username": "string",
+}
+```
+
+#### 2. Signup User
+- **Endpoint:** `POST /auth/signup`
+- **Description:** Registers a new user and returns the user details along with a JWT token.
+- **Request Body:**
+```json
+{
+  "username": "string",
+  "password": "string",
+}
+```
+- **Response:**
+  - **Status Code:**  `201 Created`
+  - **Body:**
+```json
+{
+  "id": "string",
+  "username": "string",
+}
+```
+
+#### 3. Signin User
+- **Endpoint:** `POST /auth/signin`
+- **Description:** Authenticates an existing user and returns user details along with a JWT token.
+- **Request Body:**
+```json
+{
+  "username": "string",
+  "password": "string"
+}
+```
+- **Response:**
+  - **Status Code:** `200 OK`
+```json
+{
+  "id": "string",
+  "username": "string",
+  "email": "string",
+  "firstName": "string",
+  "lastName": "string"
+}
+```
+
+#### 4. Signout User
+- **Endpoint:** `POST /auth/signout`
+- **Description:** Logs the user out by clearing the JWT token cookie. Available only for authenticated users.
+- **Response:**
+  - **Status Code:** `204 No Content`
+
+### Movie API
+#### 1. Get All Movies
+- **Endpoint:** `GET /movie`
+- **Description:** Retrieves a list of all movies.
+- **Response:**
+  - **Status Code:** `200 OK`
+```json
+[
+  {
+    "id": 1,
+    "title": "string",
+    "genre": "string",
+    "posterUrl": "string"
+  },
+]
+```
+
+#### 2. Get Movie Details by ID
+- **Endpoint:** `GET /movie/:id`
+- **Description:** Retrieves detailed information about a specific movie by its ID.
+- **Path Parameters:** 
+  - **id** (integer): The unique identifier of the movie.
+- **Response:**
+  - **Status Code:** `200 OK`
+```json
+{
+  "id": 1,
+  "title": "string",
+  "releaseYear": "string",
+  "genre": "string",
+  "runtime": "number",
+  "language": "sting",
+  "rating": "number",
+  "actors": [
+    {
+      "id": "number",
+      "name": "string",
+      "character": "string",
+      "imageUrl": "string",
+    }
+  ],
+}
+```
+
+### Favorite movies API
+#### 1. Get Favorite Movies
+- **Endpoint:** `GET /user/favorites/`
+- **Description:** Retrieves a list of the user's favorite movies. Available only for authenticated users.
+- **Response:**
+  - **Status Code:** `200 OK`
+```json
+[
+  {
+    "id": 1,
+    "title": "string",
+    "genre": "string",
+    "posterUrl": "string"
+  },
+]
+```
+
+#### 2. Add a Movie to Favorites
+- **Endpoint:** `POST /user/favorites/:movieId`
+- **Description:** Adds a movie to the user's list of favorites. Available only for authenticated users.
+- **Path Parameters:**
+  - **movieId** (integer): The unique identifier of the movie to be added.
+- **Response:**
+  - **Status Code:** `201 Created`
+
+#### 3. Remove a Movie from Favorites
+- **Endpoint:** `DELETE /user/favorites/:movieId`
+- **Description:** Removes a movie from the user's list of favorites. Available only for authenticated users.
+- **Path Parameters:**
+  - **movieId** (integer): The unique identifier of the movie to be removed.
+- **Response:**
+  - **Status Code:** `204 No Content`
