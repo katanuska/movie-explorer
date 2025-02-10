@@ -45,7 +45,10 @@ export class SeedService {
     }
   };
 
-  insertActors = async (total: number): Promise<Actor[]> => {
+  insertActors = async (total: number) => {
+    const actorsCount = await this.actorRepository.count();
+    if (actorsCount > 0) return;
+
     const actors: Actor[] = [];
 
     for (let i = 0; i < total; i++) {
@@ -53,13 +56,16 @@ export class SeedService {
       actors.push(actor);
     }
 
-    const savedActors = await this.actorRepository.save(actors);
+    await this.actorRepository.save(actors);
     console.log(`Seeded ${total} actors successfully.`);
-    return savedActors;
   };
 
-  insertMovies = async (total: number, actors: Actor[]) => {
+  insertMovies = async (total: number) => {
+    const movieCount = await this.movieRepository.count();
+    if (movieCount > 0) return;
+
     const movies: Movie[] = [];
+    const actors = await this.actorRepository.find();
 
     for (let i = 0; i < total; i++) {
       const movie = this.movieRepository.create(getMockMovie(actors));
@@ -71,8 +77,8 @@ export class SeedService {
   };
 
   async run() {
-    this.insertTestUser();
-    const actors = await this.insertActors(30);
-    this.insertMovies(30, actors);
+    await this.insertTestUser();
+    await this.insertActors(30);
+    this.insertMovies(30);
   }
 }
